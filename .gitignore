@@ -1,0 +1,11 @@
+*.log
+*.pot
+*.pyc
+*.sqlite3
+*~
+*.sql
+\#*#
+\.#*
+.DS_Store
+pip-log.txt
+images/
