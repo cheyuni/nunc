@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+root = lambda *x: os.path.join(os.path.abspath(BASE_DIR), *x)
 
 
 # Quick-start development settings - unsuitable for production
@@ -36,6 +37,8 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'users',
+    'cards',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -66,9 +69,9 @@ DATABASES = {
 # Internationalization
 # https://docs.djangoproject.com/en/1.7/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+TIME_ZONE = 'Asia/Seoul'
 
-TIME_ZONE = 'UTC'
+LANGUAGE_CODE = 'ko-KR'
 
 USE_I18N = True
 
@@ -80,4 +83,20 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
+AUTH_USER_MODEL = 'users.User'
+
 STATIC_URL = '/static/'
+DATETIME_FORMAT=('Y-m-d H:i:s',)
+DATE_FORMAT=('Y-m-d',)
+
+MEDIA_ROOT = root('media')
+MEDIA_URL = '/media/'
+STATICFILES_DIRS = (
+    root('static_root'),
+)
+
+STATIC_URL = '/static/'
+
+TEMPLATE_DIRS = (
+    root('web/templates'),
+)
