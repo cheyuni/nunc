@@ -10,6 +10,28 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
 	<!-- Latest compiled and minified JavaScript -->
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+	<style type="text/css">
+		#header {
+			background-color: blue;
+			height: 80px;
+		}
+		#main_left {
+			background-color: green;
+			height:600px;
+		}
+		#main_center {
+			background-color: yellow;
+			height: 600px;
+		}
+		#main_right {
+			background-color: red;
+			height: 600px;
+		}
+		#footer {
+			background-color: black;
+			height: 80px;
+		}
+	</style>
 </head>
 <body>
 	<div id="header">
@@ -17,13 +39,13 @@
 	</div>
 	<div class="container">
 		<div class="row">
-			<div class="col-md-2">
+			<div id="main_left" class="col-md-2">
 				left login and cards
 			</div>
-			<div class="col-md-8">
+			<div id="main_center" class="col-md-8">
 				user's cards
 			</div>
-			<div class="col-md-2">
+			<div id="main_right" class="col-md-2">
 				now playing list
 			</div>
 		</div>
