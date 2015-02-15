@@ -11,7 +11,9 @@ class Card(models.Model):
     pub_date = models.DateTimeField(_(u'생성일'), default=timezone.now, auto_now_add=True)
     users = models.ManyToManyField(User, help_text=_(u'사용자'))    
     name = models.CharField(_(u'카드 이름'), max_length=30)
-    like_count = models.IntegerField(help_text=_(u'좋아요 갯수'))
+    desc = models.CharField(_(u'카드 설명'), max_length=150)
+    like_count = models.IntegerField(help_text=_(u'좋아요 갯수'), default=0)
+    is_public = models.BooleanField(default=True, help_text=_(u'카드권한'))
 
     def __unicode__(self):
         return self.name

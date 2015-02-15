@@ -116,8 +116,8 @@ TEMPLATE_DIRS = (
 # )
 
 AUTHENTICATION_BACKENDS = (
-    'social_auth.backends.facebook.FacebookBackend',
-    # "django.contrib.auth.backends.ModelBackend",
+#     'social_auth.backends.facebook.FacebookBackend',
+    "django.contrib.auth.backends.ModelBackend",
     # "allauth.account.auth_backends.AuthenticationBackend",
 )
 

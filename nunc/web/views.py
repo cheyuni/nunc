@@ -1,13 +1,15 @@
 # -*- coding:utf-8 -*-
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.generic.base import TemplateView
-# Create your views here.
+from django.contrib.auth import login, logout
+from users.models import User
 
 class NuncBaseView(TemplateView):
     template_name = 'index.html'
 
     def get(self, request, *args, **kwargs):
-        return render(request, self.template_name)
+        user = request.user
+        return render(request, self.template_name, {'user':user})
 
 class LoginView(TemplateView):
     template_name = 'session.html'
@@ -15,6 +17,22 @@ class LoginView(TemplateView):
     def get(self, request, *args, **kwargs):
         return render(request, self.template_name)
 
+    def post(self, request, *args, **kwargs):
+
+        email = request.POST.get('email')
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')        
+        facebook_id = request.POST.get('id')
+        name = request.POST.get('name')        
+
+        user, created = User.objects.get_or_create(email=email, first_name=first_name, last_name=last_name,
+                                          facebook_id=facebook_id, username=name)
+
+        user.backend = 'django.contrib.auth.backends.ModelBackend'
+
+        login(request, user)
+        return redirect('/')
+        
     # def post(self, request, *args, **kwargs):
     #     form = UserValidationForm(request.POST)
     #     if form.is_valid():

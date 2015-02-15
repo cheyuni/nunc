@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>넌 뭐하냐눙</title>
+	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+	<script>
+		$("document").ready(function(){
+		$("#make-card-submit").click(function(){
+		$("#card-form").submit();
+		});
+		
+		{% block ready %}
+		{% endblock %}
+		});
+
+	</script>
+	<style type="text/css">
+		#header {
+		background-color: #98c21c;
+		height: 50px;
+		}
+		#nunc_container {
+		margin: auto;
+		height: 800px;
+		}
+		#main_left {
+		background-color: #e9eade;
+		width: 150px;
+		position:absolute;
+		overflow:hidden;
+		left:0;
+		height: 800px;
+		}
+		#main_center {
+		background-color: #cccbcb;
+		min-width:300px;
+		position:absolute;
+		left:150px;
+		right:300px;
+		height: 800px;
+		padding:20px;
+		
+		}
+		#main_right {
+		position:absolute;
+		right:0;
+		background-color: #e9eade;
+		width: 300px;
+		height: 800px;
+		}
+		.usr_info {
+		margin: 10px;
+		font-size: 8pt;
+		}
+		.card_set {
+		margin: 10px;
+		width: 85%;
+		height: 100px;
+		background-color: #98c21c;
+
+		}
+		.usr_card {
+		margin: 0px;
+		padding: 0px;
+		background-color: white;
+		width: 300px;
+		height: 350px;
+		margin: 15px;
+		}
+		.list-group-item {
+		cursor:pointer;
+		}
+	</style>
+</head>
+<body>
+	<div id="header">
+		header
+	</div>
+	<div id="nunc_container" class="clearfix">
+		<div id="main_left">
+			
+			<div class="usr_info">
+				<ul class="list-group">
+					<li id="make-card" class="list-group-item" data-toggle="modal" data-target="#make-card-modal"><span class="badge">4</span>리스트 만들기</li>
+					<li class="list-group-item"><span class="badge">5</span>음악 보관함</li>
+					<li class="list-group-item"><span class="badge">3</span>친구 초대</li>
+					<li class="list-group-item"><span class="badge">3</span>설정</li>
+					<li class="list-group-item"><span class="badge">3</span>로그아웃</li>
+				</ul>	
+			</div>
+			<div class="card_set">
+			</div>
+		</div>
+		<div id="main_center">
+			{% block body %}
+			{% endblock %}
+		</div>
+		<div id="main_right">
+		</div>
+	</div>
+</body>
+</html>
+<!-- 카드생성 검색 모달 -->
+<div class="modal fade" id="make-card-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<a type="a" class="close" data-dismiss="modal" aria-hidden="true">&times;</a>
+				<h4 class="modal-title">새로운 카드를 만듭니다.</h4>
+			</div>
+			<form id="card-form" action="card/" method="post">
+				{% csrf_token %}
+				<div class="modal-body clearfix">
+					<div class="form-group clearfix">
+						<label class="col-sm-3 control-label">카드 이름</label>
+						<div class="col-sm-9">
+							<input name="card_title" type="text" class="form-control" placeholder="기분좋은" />
+						</div>
+					</div>
+					
+					<div class="form-group clearfix">
+						<label class="col-sm-3 control-label">카드에 대한 설명</label>
+						<div class="col-sm-9">
+							<input name="card_desc" type="text" class="form-control" placeholder="기분좋은날 추가한 리스트" />
+						</div>
+					</div>
+					
+					<div class="form-group clearfix">
+						<label class="col-sm-3 control-label">카드 공유 여부</label>
+						<div class="col-sm-9">
+							<div class="col-sm-6 row">
+								<label><input name="is_public" type="radio" value="1" checked="checked"/> 이 카드를 공유할레요</label>
+							</div>
+							<div class="col-sm-6">
+								<label><input name="is_public" type="radio" value="0"/> 이 카드는 나만의 것이에요</label>				
+							</div>
+						</div>
+					</div>
+				</div> <!-- end body -->					
+			</form>
+			<div class="modal-footer">
+				<a id="close_modal_adv" type="a" class="btn btn-default" data-dismiss="modal">닫기</a>
+				<a id="make-card-submit" type="a" class="btn btn-primary">추가</a>
+			</div>
+		</div>
+	</div>
+</div>
+
