@@ -12,24 +12,54 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 	<style type="text/css">
 		#header {
-			background-color: blue;
-			height: 80px;
+			background-color: #98c21c;
+			height: 50px;
+		}
+		#nunc_container {
+			margin: auto;
+			height: 800px;
 		}
 		#main_left {
-			background-color: green;
-			height:600px;
+			background-color: #e9eade;
+			width: 150px;
+			position:absolute;
+			overflow:hidden;
+			left:0;
+			height: 800px;
 		}
 		#main_center {
-			background-color: yellow;
-			height: 600px;
+			background-color: #cccbcb;
+			min-width:300px;
+			position:absolute;
+			left:150px;
+			right:300px;
+			height: 800px;
 		}
 		#main_right {
-			background-color: red;
-			height: 600px;
+			position:absolute;
+			right:0;
+			background-color: #e9eade;
+			width: 300px;
+			height: 800px;
 		}
-		#footer {
-			background-color: black;
-			height: 80px;
+		.usr_info {
+			margin: 10px;
+			font-size: 8pt;
+		}
+		.card_set {
+			margin: 10px;
+			width: 85%;
+			height: 100px;
+			background-color: #98c21c;
+
+		}
+		.usr_card {
+			margin: 0px;
+			padding: 0px;
+			background-color: white;
+			width: 300px;
+			height: 350px;
+			margin: 15px;
 		}
 	</style>
 </head>
@@ -37,21 +67,38 @@
 	<div id="header">
 		header
 	</div>
-	<div class="container">
-		<div class="row">
-			<div id="main_left" class="col-md-2">
-				left login and cards
+	<div id="nunc_container" class="clearfix">
+		<div id="main_left">
+			<div class="usr_info">
+				<ul class="list-group">
+					<li class="list-group-item"><span class="badge">4</span>리스트 만들기</li>
+					<li class="list-group-item"><span class="badge">5</span>음악 보관함</li>
+					<li class="list-group-item"><span class="badge">3</span>친구 초대</li>
+					<li class="list-group-item"><span class="badge">3</span>설정</li>
+					<li class="list-group-item"><span class="badge">3</span>로그아웃</li>
+				</ul>	
 			</div>
-			<div id="main_center" class="col-md-8">
-				user's cards
-			</div>
-			<div id="main_right" class="col-md-2">
-				now playing list
+			<div class="card_set">
 			</div>
 		</div>
-	</div>
-	<div id="footer">
-		footer
+		<div id="main_center">
+			<table>
+				<tr>
+					<td>
+						<div class="usr_card">user_card_1</div>
+					</td>
+					<td>
+						<div class="usr_card">user_card_2</div>
+					</td>
+					<td>
+						<div class="usr_card">user_card_3</div>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div id="main_right">
+
+		</div>
 	</div>
 </body>
 </html>
