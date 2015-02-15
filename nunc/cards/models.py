@@ -29,7 +29,7 @@ class Video(models.Model):
     title = models.CharField(max_length=100, help_text=_(u'실제 영상 제목'))
     query = models.CharField(max_length=100, help_text=_(u'사용자 쿼리'))
     key = models.CharField(max_length=30, help_text=_(u'유투브 키'))
-
+    image_url = models.CharField(max_length=120, help_text=_(u'이미지 url'))
     
     def __unicode__(self):
         return self.title

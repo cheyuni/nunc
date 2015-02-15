@@ -11,17 +11,57 @@
 	<!-- Latest compiled and minified JavaScript -->
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 	<script>
+      var tag = document.createElement('script');
+
+      tag.src = "https://www.youtube.com/iframe_api";
+      var firstScriptTag = document.getElementsByTagName('script')[0];
+      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+      var player;
+      function onYouTubeIframeAPIReady() {
+        player = new YT.Player('player', {
+          height: '200',
+          width: '300',
+          videoId: 'M7lc1UVf-VE',
+          events: {
+            'onReady': onPlayerReady,
+            'onStateChange': onPlayerStateChange
+          }
+        });
+      }
+
+      function onPlayerReady(event) {
+        event.target.playVideo();
+      }
+
+      var done = false;
+      function onPlayerStateChange(event) {
+        if (event.data == YT.PlayerState.PLAYING && !done) {
+          setTimeout(stopVideo, 6000);
+          done = true;
+        }
+      }
+      function stopVideo() {
+        player.stopVideo();
+      }
+
 		$("document").ready(function(){
 		$("#make-card-submit").click(function(){
 		$("#card-form").submit();
 		});
-		
+
+
 		{% block ready %}
 		{% endblock %}
 		});
 
 	</script>
 	<style type="text/css">
+		#player {
+		width:300px;
+		height:200px;
+
+		}
 		#header {
 		background-color: #98c21c;
 		height: 50px;
@@ -46,7 +86,7 @@
 		right:300px;
 		height: 800px;
 		padding:20px;
-		
+
 		}
 		#main_right {
 		position:absolute;
@@ -85,15 +125,15 @@
 	</div>
 	<div id="nunc_container" class="clearfix">
 		<div id="main_left">
-			
+
 			<div class="usr_info">
 				<ul class="list-group">
 					<li id="make-card" class="list-group-item" data-toggle="modal" data-target="#make-card-modal"><span class="badge">4</span>리스트 만들기</li>
-					<li class="list-group-item"><span class="badge">5</span>음악 보관함</li>
+					<li id="mypage" class="list-group-item"><span class="badge">5</span><a href="/card/">마이페이지</a></li>
 					<li class="list-group-item"><span class="badge">3</span>친구 초대</li>
 					<li class="list-group-item"><span class="badge">3</span>설정</li>
 					<li class="list-group-item"><span class="badge">3</span>로그아웃</li>
-				</ul>	
+				</ul>
 			</div>
 			<div class="card_set">
 			</div>
@@ -103,10 +143,12 @@
 			{% endblock %}
 		</div>
 		<div id="main_right">
+			<div id="player"></div>
 		</div>
 	</div>
 </body>
 </html>
+
 <!-- 카드생성 검색 모달 -->
 <div class="modal fade" id="make-card-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-dialog">
@@ -124,14 +166,14 @@
 							<input name="card_title" type="text" class="form-control" placeholder="기분좋은" />
 						</div>
 					</div>
-					
+
 					<div class="form-group clearfix">
 						<label class="col-sm-3 control-label">카드에 대한 설명</label>
 						<div class="col-sm-9">
 							<input name="card_desc" type="text" class="form-control" placeholder="기분좋은날 추가한 리스트" />
 						</div>
 					</div>
-					
+
 					<div class="form-group clearfix">
 						<label class="col-sm-3 control-label">카드 공유 여부</label>
 						<div class="col-sm-9">
@@ -139,11 +181,11 @@
 								<label><input name="is_public" type="radio" value="1" checked="checked"/> 이 카드를 공유할레요</label>
 							</div>
 							<div class="col-sm-6">
-								<label><input name="is_public" type="radio" value="0"/> 이 카드는 나만의 것이에요</label>				
+								<label><input name="is_public" type="radio" value="0"/> 이 카드는 나만의 것이에요</label>
 							</div>
 						</div>
 					</div>
-				</div> <!-- end body -->					
+				</div> <!-- end body -->
 			</form>
 			<div class="modal-footer">
 				<a id="close_modal_adv" type="a" class="btn btn-default" data-dismiss="modal">닫기</a>
@@ -152,4 +194,3 @@
 		</div>
 	</div>
 </div>
-
