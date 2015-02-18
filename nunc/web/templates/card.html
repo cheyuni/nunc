@@ -1,4 +1,10 @@
 {% extends 'base.html' %}
+{% block ready %}
+	$(".pin").click(function(){
+	var id = $(this).attr('card-id');
+	location.href="/card/" + id;
+	});
+{% endblock %}
 {% block body %}
 <style type="text/css">
 	#profile {
@@ -37,7 +43,7 @@
 	padding-bottom: 5px;
 	background: -webkit-linear-gradient(45deg, #FFF, #F9F9F9);
 	opacity: 1;
-	
+	cursor:pointer;	
 	-webkit-transition: all .2s ease;
 	-moz-transition: all .2s ease;
 	-o-transition: all .2s ease;
@@ -87,7 +93,7 @@
 	</div>
 	<div id="card-list">
 		{% for card in cards %}
-		<div class="pin">
+		<div class="pin" card-id="{{ card.id }}">
       <img src="http://graph.facebook.com/{{ user.facebook_id }}/picture?width=200&height=200" alt="PlaceKitten" />
       <p>{{ card.name }}</p>
 			<p>{{ card.desc }}</p>
