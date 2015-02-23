@@ -1,50 +1,49 @@
 # -*- coding:utf-8 -*-
 from django.shortcuts import render, redirect
-from django.views.generic.base import TemplateView
+from django.views.generic.base import TemplateView, View
 from django.contrib.auth import login, logout
+from django.core.urlresolvers import reverse
 from users.models import User
+from cards.models import Card, Video
 
 class NuncBaseView(TemplateView):
     template_name = 'index.html'
 
     def get(self, request, *args, **kwargs):
+
         user = request.user
-        return render(request, self.template_name, {'user':user})
-
-class LoginView(TemplateView):
-    template_name = 'session.html'
-
-    def get(self, request, *args, **kwargs):
-        return render(request, self.template_name)
+        cards = Card.objects.filter(is_public=True).order_by('-like_count')
+        return render(request, self.template_name, {'user':user, 'cards':cards})
 
     def post(self, request, *args, **kwargs):
 
+        user = request.user
+        cards = Card.objects.filter(is_public=True).order_by('-like_count')
+        return render(request, self.template_name, {'user':user, 'cards':cards})
+
+
+class LoginView(View):
+    def post(self, request, *args, **kwargs):
         email = request.POST.get('email')
         first_name = request.POST.get('first_name')
-        last_name = request.POST.get('last_name')        
+        last_name = request.POST.get('last_name')
         facebook_id = request.POST.get('id')
-        name = request.POST.get('name')        
+        name = request.POST.get('name')
 
         user, created = User.objects.get_or_create(email=email, first_name=first_name, last_name=last_name,
                                           facebook_id=facebook_id, username=name)
 
         user.backend = 'django.contrib.auth.backends.ModelBackend'
-
+        print 'here'
         login(request, user)
         return redirect('/')
-        
-    # def post(self, request, *args, **kwargs):
-    #     form = UserValidationForm(request.POST)
-    #     if form.is_valid():
-    #         user_id = form.cleaned_data['user_id']
-    #         password = form.cleaned_data['password']
 
-    #         user = authenticate(user_id=user_id, password=password)
-    #         if user is not None:
-    #             if user.check_password(password):
-    #                 login(request, user)
-    #                 return HttpResponseRedirect('/cooperation/')
-    #     return render(request, self.template_name, data)
+
+class LogoutView(View):
+    def get(self, request, *args, **kwargs):
+        user = request.user
+        logout(request)
+        return redirect('/')
 
 
 class CardView(TemplateView):
@@ -167,7 +166,7 @@ def playlist(request):
     response = HttpResponse(content_type='application/json')
     response.status = 403
     result = dict(success=False, message='잘못된 접근')
-    
+
     playlists = Playlist.objects.all()
 
     datum = json.loads(serializers.serialize('json', playlists))
@@ -184,7 +183,7 @@ def playlist_detail(request, list_id):
     response = HttpResponse(content_type='application/json')
     response.status = 403
     result = dict(success=False, message='잘못된 접근')
-    
+
     musics = Playlist.objects.get(id=list_id).music_set.all()
 
     datum = json.loads(serializers.serialize('json', musics))
@@ -196,4 +195,3 @@ def playlist_detail(request, list_id):
 
     response.content = json.dumps(result)
     return response
-        

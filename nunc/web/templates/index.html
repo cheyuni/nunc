@@ -2,18 +2,21 @@
 {% block ready %}
 {% endblock %}
 {% block body %}
-	<table>
-		<tr>
-			<td>
-				<div class="usr_card">user_card_1</div>
-			</td>
-			<td>
-				<div class="usr_card">user_card_2</div>
-			</td>
-			<td>
-				<div class="usr_card">user_card_3</div>
-			</td>
-		</tr>
-	</table>
-{% endblock %}
+	<div id="profile">
+		<h2 style="margin-top:0;">
+			<span>{{ user.username }}님 반갑습니다.</span>
+		</h2>
+		<p>다른이들의 음악을 들어보세요.</p>
+	</div>
+	<div id="card-list">
+		{% for card in cards %}
+		<div class="pin" card-id="{{ card.id }}">
+      <img src="http://graph.facebook.com/{{ user.facebook_id }}/picture?width=200&height=200" alt="PlaceKitten" />
+      <p>{{ card.name }}</p>
+			<p>{{ card.desc }}</p>
+		</div>
+		{% endfor %}
+	</div>
 
+
+{% endblock %}

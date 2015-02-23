@@ -1,152 +1,142 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<title>넌 뭐하냐눙</title>
-	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-	<!-- Latest compiled and minified CSS -->
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-	<!-- Optional theme -->
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
-	<!-- Latest compiled and minified JavaScript -->
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
-	<script>
-      var tag = document.createElement('script');
+	<head>
+		<title>넌 뭐하냐눙</title>
+		<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+		<!-- Latest compiled and minified CSS -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+		<link rel="stylesheet" href="/static/web/css/common.css">
+		<!-- Optional theme -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+		<!-- Latest compiled and minified JavaScript -->
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+		<script src="http://connect.facebook.net/en_US/all.js"></script>
+		<div id="fb-root"></div>
+		<script>
 
-      tag.src = "https://www.youtube.com/iframe_api";
-      var firstScriptTag = document.getElementsByTagName('script')[0];
-      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+function statusChangeCallback(response) {
+  if (response.status === 'connected') {
+    nunc_login();
+  } else if (response.status === 'not_authorized') {
+		alert("페이스북 권한 승인이 필요합니다.");
+  } else {
+    {% if user.is_authenticated %}
+    location.href="/logout/";
+	  {% endif %}
+  }
+}
 
-      var player;
-      function onYouTubeIframeAPIReady() {
-        player = new YT.Player('player', {
-          height: '200',
-          width: '300',
-          videoId: 'M7lc1UVf-VE',
-          events: {
-            'onReady': onPlayerReady,
-            'onStateChange': onPlayerStateChange
-          }
-        });
-      }
+function checkLoginState() {
+  FB.getLoginStatus(function(response) {
+      statusChangeCallback(response);
+    });
+}
 
-      function onPlayerReady(event) {
-        event.target.playVideo();
-      }
+window.fbAsyncInit = function() {
+  FB.init({
+    appId      : '423216974499409',
+    cookie     : true,
+    xfbml      : true,
+    version    : 'v2.1'
+  });
 
-      var done = false;
-      function onPlayerStateChange(event) {
-        if (event.data == YT.PlayerState.PLAYING && !done) {
-          setTimeout(stopVideo, 6000);
-          done = true;
-        }
-      }
-      function stopVideo() {
-        player.stopVideo();
-      }
+  FB.getLoginStatus(function(response) {
+      statusChangeCallback(response);
+    });
+
+};
+
+(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/ko_KR/sdk.js#xfbml=1&appId=423216974499409&version=v2.0";
+  fjs.parentNode.insertBefore(js, fjs);
+ }(document, 'script', 'facebook-jssdk'));
+
+function nunc_login() {
+  if($("#login-status").text() == '로그인'){
+      FB.api('/me', function(response) {
+      $("#email").val(response.email);
+      $("#first_name").val(response.first_name);
+      $("#last_name").val(response.last_name);
+      $("#id").val(response.id);
+      $("#name").val(response.name);
+      $("#login-form").submit();
+    });
+    $("#login-statue").text('로그아웃');
+  }
+}
+
+
+
 
 		$("document").ready(function(){
-		$("#make-card-submit").click(function(){
-		$("#card-form").submit();
+    $("#make-card-submit").click(function(){
+		    $("#card-form").submit();
+      });
+    $("#login").click(function(){
+        $(".fb-login-button").eq(0).click();
+    });
+    {% block ready %}
+    {% endblock %}
 		});
+		</script>
+		<script src="/static/web/js/facebook.js"></script>
+		<script src="/static/web/js/common.js"></script>
+		<script src="/static/web/js/youtube.js"></script>
 
-
-		{% block ready %}
-		{% endblock %}
-		});
-
-	</script>
-	<style type="text/css">
-		#player {
-		width:300px;
-		height:200px;
-
-		}
-		#header {
-		background-color: #98c21c;
-		height: 50px;
-		}
-		#nunc_container {
-		margin: auto;
-		height: 800px;
-		}
-		#main_left {
-		background-color: #e9eade;
-		width: 150px;
-		position:absolute;
-		overflow:hidden;
-		left:0;
-		height: 800px;
-		}
-		#main_center {
-		background-color: #cccbcb;
-		min-width:300px;
-		position:absolute;
-		left:150px;
-		right:300px;
-		height: 800px;
-		padding:20px;
-
-		}
-		#main_right {
-		position:absolute;
-		right:0;
-		background-color: #e9eade;
-		width: 300px;
-		height: 800px;
-		}
-		.usr_info {
-		margin: 10px;
-		font-size: 8pt;
-		}
-		.card_set {
-		margin: 10px;
-		width: 85%;
-		height: 100px;
-		background-color: #98c21c;
-
-		}
-		.usr_card {
-		margin: 0px;
-		padding: 0px;
-		background-color: white;
-		width: 300px;
-		height: 350px;
-		margin: 15px;
-		}
-		.list-group-item {
-		cursor:pointer;
-		}
-	</style>
-</head>
-<body>
-	<div id="header">
-		header
-	</div>
-	<div id="nunc_container" class="clearfix">
-		<div id="main_left">
-
-			<div class="usr_info">
-				<ul class="list-group">
-					<li id="make-card" class="list-group-item" data-toggle="modal" data-target="#make-card-modal"><span class="badge">4</span>리스트 만들기</li>
-					<li id="mypage" class="list-group-item"><span class="badge">5</span><a href="/card/">마이페이지</a></li>
-					<li class="list-group-item"><span class="badge">3</span>친구 초대</li>
-					<li class="list-group-item"><span class="badge">3</span>설정</li>
-					<li class="list-group-item"><span class="badge">3</span>로그아웃</li>
-				</ul>
-			</div>
-			<div class="card_set">
+	</head>
+	<body>
+		<div id="header">
+			<div id="header-box">
+				<a href="/">Project Nunc</a>
 			</div>
 		</div>
-		<div id="main_center">
-			{% block body %}
-			{% endblock %}
+		<div id="nunc-container" class="clearfix">
+			<div id="main-left">
+				<div id="sidebar">
+					<div id="status"></div>
+					<ul class="list-group">
+						<li id="user-profile" class="list-group-item">
+							{% if user.is_authenticated %}
+							<img style="width:60px; height:60px;" src="http://graph.facebook.com/{{ user.facebook_id }}/picture" />
+							{% else %}
+							<img style="width:60px; height:60px;" src="/static/web/Review_CEO.png" />
+							{% endif %}
+							<span>{{ user.username }}</span>
+						</li>
+						<li id="make-card" class="list-group-item" ><a href="/">다른이들의 시간</a></li>
+						<li id="make-card" class="list-group-item" data-toggle="modal" data-target="#make-card-modal"><a href="#">리스트 만들기</a></li>
+						<li id="mypage" class="list-group-item"><a href="/card/">마이페이지</a></li>
+						<li id="login" class="list-group-item">
+							<div class="fb-login-button" data-max-rows="1" data-size="icon" data-show-faces="false" data-auto-logout-link="true" onlogin="checkLoginState()"></div><span id="login-status">{% if user.is_authenticated %}로그아웃{% else %}로그인{% endif %}</span>
+						</li>
+					</ul>
+				</div>
+				<div class="card-set">
+				</div>
+			</div>
+			<div id="main-center">
+				{% block body %}
+				{% endblock %}
+			</div>
+			<div id="main-right">
+				<div id="player"></div>
+			</div>
+			<form id="login-form" action="/login/" method="post">
+				{% csrf_token %}
+				<input id="email" type="hidden" name="email" value="" />
+				<input id="first_name" type="hidden" name="first_name" value="" />
+				<input id="last_name" type="hidden" name="last_name" value="" />
+				<input id="id" type="hidden" name="id" value="" />
+				<input id="name" type="hidden" name="name" value="" />
+			</form>
+			<form id="logout-form" action="/logout/" method="get">
+			</form>
 		</div>
-		<div id="main_right">
-			<div id="player"></div>
-		</div>
-	</div>
-</body>
+	</body>
 </html>
 
 <!-- 카드생성 검색 모달 -->
