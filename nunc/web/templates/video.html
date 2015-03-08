@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% block ready %}
 	$(".pin").click(function(){
+
 	var key = $(this).attr("video-key");
 	player.loadVideoById(key, 5, "large")
 

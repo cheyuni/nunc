@@ -23,19 +23,27 @@ class NuncBaseView(TemplateView):
 
 
 class LoginView(View):
+    template_name = 'index.html'
+
     def post(self, request, *args, **kwargs):
-        email = request.POST.get('email')
-        first_name = request.POST.get('first_name')
-        last_name = request.POST.get('last_name')
-        facebook_id = request.POST.get('id')
-        name = request.POST.get('name')
+        user = request.user
+        cards = Card.objects.filter(is_public=True).order_by('-like_count')
+        if user.is_authenticated:
+            email = request.POST.get('email')
+            first_name = request.POST.get('first_name')
+            last_name = request.POST.get('last_name')
+            facebook_id = request.POST.get('id')
+            name = request.POST.get('name')
 
-        user, created = User.objects.get_or_create(email=email, first_name=first_name, last_name=last_name,
-                                          facebook_id=facebook_id, username=name)
+            user, created = User.objects.get_or_create(email=email, first_name=first_name, last_name=last_name, username=name)
+            if created:
+                user.socialaccount_set.create(provider='facebook', uid=facebook_id)
 
-        user.backend = 'django.contrib.auth.backends.ModelBackend'
-        login(request, user)
-        return redirect('/')
+            user.backend = 'django.contrib.auth.backends.ModelBackend'
+            login(request, user)
+            return redirect('/')
+        else:
+            return render(request, self.template_name, {'user':user, 'cards':cards})
 
 
 class LogoutView(View):

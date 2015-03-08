@@ -11,7 +11,7 @@
 	<div id="card-list">
 		{% for card in cards %}
 		<div class="pin" card-id="{{ card.id }}">
-      <img src="{{ card.video_set.first.image_url }}" />
+      <img src="{% if card.video_set.exists %}{{ card.video_set.first.image_url }}{% else %}http://graph.facebook.com/{{ user.socialaccount_set.first.uid }}/picture?type=large{% endif %}" />
       <p>{{ card.name }}</p>
 			<p>{{ card.desc }}</p>
 		</div>

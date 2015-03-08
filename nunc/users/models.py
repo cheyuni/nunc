@@ -7,8 +7,6 @@ from django.utils import timezone
 from nunc import settings
 
 class User(AbstractBaseUser, PermissionsMixin):
-    facebook_id = models.CharField(max_length="16", help_text=_(u'페이스북 아이디'), default='', unique=True)
-    status = models.IntegerField(default=0, help_text=_(u'로그인상태'))
     username = models.CharField(_('username'), max_length=30, unique=True,
         help_text=_('Required. 30 characters or fewer. Letters, digits and '
                     '@/./+/-/_ only.'),
@@ -27,7 +25,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     date_joined = models.DateTimeField(_('date joined'), default=timezone.now)
 
     profile = models.TextField(_('profile'), blank=True)
-
     objects = UserManager()
 
     USERNAME_FIELD = 'username'

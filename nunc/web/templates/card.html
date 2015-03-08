@@ -13,7 +13,7 @@
 {% block body %}
 	<div id="profile">
 		<h2>
-			<img src="http://graph.facebook.com/{{ user.facebook_id }}/picture" class="img-circle" />
+			<img src="http://graph.facebook.com/{{ user.socialaccount_set.first.uid }}/picture" class="img-circle" />
 			<span>{{ user.username }}</span>
 		</h2>
 		<p id="profile-text" data-toggle="modal" data-target="#profile-modal">{% if user.profile %}{{ user.profile }}{% else %}이곳을 클릭해서 개인 프로필을 등록해 주세요{% endif %}</p>
@@ -21,7 +21,7 @@
 	<div id="card-list">
 		{% for card in cards %}
 		<div class="pin" card-id="{{ card.id }}">
-      <img src="{{ card.video_set.first.image_url}}" />
+      <img src="{% if card.video_set.exists %}{{ card.video_set.first.image_url_high }}{% else %}http://graph.facebook.com/{{ user.socialaccount_set.first.uid }}/picture?type=large{% endif %}" />
       <p>{{ card.name }}</p>
 			<p>{{ card.desc }}</p>
 		</div>

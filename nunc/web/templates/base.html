@@ -13,50 +13,49 @@
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 		<script src="http://connect.facebook.net/en_US/all.js"></script>
 		<div id="fb-root"></div>
+		{% load socialaccount %}
 		<script>
-
-function statusChangeCallback(response) {
-  if (response.status === 'connected') {
-    nunc_login();
-  } else if (response.status === 'not_authorized') {
-		alert("페이스북 권한 승인이 필요합니다.");
-  } else {
-    {% if user.is_authenticated %}
-    location.href="/logout/";
-	  {% endif %}
-  }
-}
-
-function checkLoginState() {
-  FB.getLoginStatus(function(response) {
+			function checkLoginState() {
+			FB.getLoginStatus(function(response) {
       statusChangeCallback(response);
-    });
-}
+			});
+			}
 
-window.fbAsyncInit = function() {
-  FB.init({
-    appId      : '423216974499409',
-    cookie     : true,
-    xfbml      : true,
-    version    : 'v2.1'
-  });
+			window.fbAsyncInit = function() {
+			FB.init({
+			appId      : '423216974499409',
+			cookie     : true,
+			xfbml      : true,
+			version    : 'v2.1'
+			});
 
-  FB.getLoginStatus(function(response) {
+			FB.getLoginStatus(function(response) {
       statusChangeCallback(response);
-    });
+			});
 
-};
+			};
 
-(function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) return;
-  js = d.createElement(s); js.id = id;
-  js.src = "//connect.facebook.net/ko_KR/sdk.js#xfbml=1&appId=423216974499409&version=v2.0";
-  fjs.parentNode.insertBefore(js, fjs);
- }(document, 'script', 'facebook-jssdk'));
+			function statusChangeCallback(response) {
+			if (response.status === 'connected') {
+			{% if not user.is_authenticated %}
+			nunc_login();
+  		{% endif %}
+			} else if (response.status === 'not_authorized') {
+			alert("페이스북 권한 승인이 필요합니다.");
+			} else {
+			alert("로그아웃상태");
+			}
+			}
 
-function nunc_login() {
-  if($("#login-status").text() == '로그인'){
+			(function(d, s, id) {
+			var js, fjs = d.getElementsByTagName(s)[0];
+			if (d.getElementById(id)) return;
+			js = d.createElement(s); js.id = id;
+			js.src = "//connect.facebook.net/ko_KR/sdk.js#xfbml=1&appId=423216974499409&version=v2.0";
+			fjs.parentNode.insertBefore(js, fjs);
+			}(document, 'script', 'facebook-jssdk'));
+
+			function nunc_login() {
       FB.api('/me', function(response) {
       $("#email").val(response.email);
       $("#first_name").val(response.first_name);
@@ -64,12 +63,8 @@ function nunc_login() {
       $("#id").val(response.id);
       $("#name").val(response.name);
       $("#login-form").submit();
-    });
-    $("#login-statue").text('로그아웃');
-  }
-}
-
-
+			});
+			}
 
 
 		$("document").ready(function(){
@@ -79,6 +74,10 @@ function nunc_login() {
     $("#login").click(function(){
         $(".fb-login-button").eq(0).click();
     });
+
+		$(".video").click(function(){
+			player.loadVideoById($(this).attr('video-key'), 5, "large")
+			});
     {% block ready %}
     {% endblock %}
 		});
@@ -90,6 +89,7 @@ function nunc_login() {
 	</head>
 	<body>
 		<div id="header">
+			<a style="float:right;margin-top:20px;margin-right:10px;" href="{% provider_login_url "facebook" method="oauth2" %}">페이스북 로그인</a>
 			<div id="header-box">
 				<a href="/">Project Nunc</a>
 			</div>
@@ -101,18 +101,15 @@ function nunc_login() {
 					<ul class="list-group">
 						<li id="user-profile" class="list-group-item">
 							{% if user.is_authenticated %}
-							<img style="width:60px; height:60px;" src="http://graph.facebook.com/{{ user.facebook_id }}/picture" />
+							<img style="width:60px; height:60px;" src="http://graph.facebook.com/{{ user.socialaccount_set.first.uid }}/picture" />
 							{% else %}
 							<img style="width:60px; height:60px;" src="/static/web/Review_CEO.png" />
 							{% endif %}
 							<span>{{ user.username }}</span>
 						</li>
-						<li id="make-card" class="list-group-item" ><a href="/">다른이들의 시간</a></li>
+						<li id="popular" class="list-group-item" ><a href="/">다른이들의 시간</a></li>
 						<li id="make-card" class="list-group-item" data-toggle="modal" data-target="#make-card-modal"><a href="#">리스트 만들기</a></li>
 						<li id="mypage" class="list-group-item"><a href="/card/">마이페이지</a></li>
-						<li id="login" class="list-group-item">
-							<div class="fb-login-button" data-max-rows="1" data-size="icon" data-show-faces="false" data-auto-logout-link="true" onlogin="checkLoginState()"></div><span id="login-status">{% if user.is_authenticated %}로그아웃{% else %}로그인{% endif %}</span>
-						</li>
 					</ul>
 				</div>
 				<div class="card-set">
@@ -124,6 +121,15 @@ function nunc_login() {
 			</div>
 			<div id="main-right">
 				<div id="player"></div>
+
+				<ul id="now-playing" class="list-group">
+					<li class="list-group-item header">선택하신 카드 : {{ user.card_set.first.name }}</li>
+					{% for video in user.card_set.first.video_set.all %}
+						<li class="video list-group-item" video-key="{{ video.key }}">{{ video.title }}</li>
+					{% endfor %}
+
+				</ul>
+
 			</div>
 			<form id="login-form" action="/login/" method="post">
 				{% csrf_token %}
@@ -147,7 +153,7 @@ function nunc_login() {
 				<a type="a" class="close" data-dismiss="modal" aria-hidden="true">&times;</a>
 				<h4 class="modal-title">새로운 카드를 만듭니다.</h4>
 			</div>
-			<form id="card-form" action="card/" method="post">
+			<form id="card-form" action="/card/" method="post">
 				{% csrf_token %}
 				<div class="modal-body clearfix">
 					<div class="form-group clearfix">
