@@ -9,7 +9,7 @@ from users.models import User
 
 class Card(models.Model):
     pub_date = models.DateTimeField(_(u'생성일'), default=timezone.now, auto_now_add=True)
-    users = models.ManyToManyField(User, help_text=_(u'사용자'))    
+    users = models.ManyToManyField(User, help_text=_(u'사용자'))
     name = models.CharField(_(u'카드 이름'), max_length=30)
     desc = models.CharField(_(u'카드 설명'), max_length=150)
     like_count = models.IntegerField(help_text=_(u'좋아요 갯수'), default=0)
@@ -22,7 +22,7 @@ class Card(models.Model):
         ordering = ['-id']
         verbose_name = _(u'카드')
         verbose_name_plural = _(u'카드')
-    
+
 class Video(models.Model):
     pub_date = models.DateTimeField(_(u'생성일'), default=timezone.now, auto_now_add=True)
     card = models.ForeignKey(Card, help_text=_(u'속한카드'))
@@ -30,7 +30,9 @@ class Video(models.Model):
     query = models.CharField(max_length=100, help_text=_(u'사용자 쿼리'))
     key = models.CharField(max_length=30, help_text=_(u'유투브 키'))
     image_url = models.CharField(max_length=120, help_text=_(u'이미지 url'))
-    
+    image_url_medium = models.CharField(max_length=120, help_text=_(u'이미지 url medium'))
+    image_url_high = models.CharField(max_length=120, help_text=_(u'이미지 url high'))
+
     def __unicode__(self):
         return self.title
 

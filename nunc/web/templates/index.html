@@ -11,7 +11,7 @@
 	<div id="card-list">
 		{% for card in cards %}
 		<div class="pin" card-id="{{ card.id }}">
-      <img src="http://graph.facebook.com/{{ user.facebook_id }}/picture?width=200&height=200" alt="PlaceKitten" />
+      <img src="{{ card.video_set.first.image_url }}" />
       <p>{{ card.name }}</p>
 			<p>{{ card.desc }}</p>
 		</div>

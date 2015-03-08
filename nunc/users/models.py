@@ -26,6 +26,8 @@ class User(AbstractBaseUser, PermissionsMixin):
                     'active. Unselect this instead of deleting accounts.'))
     date_joined = models.DateTimeField(_('date joined'), default=timezone.now)
 
+    profile = models.TextField(_('profile'), blank=True)
+
     objects = UserManager()
 
     USERNAME_FIELD = 'username'
@@ -48,7 +50,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         """
         send_mail(subject, message, from_email, [self.email], **kwargs)
 
-    
+
     class Meta:
         verbose_name=_(u'사용자')
         verbose_name_plural = _(u'사용자들')

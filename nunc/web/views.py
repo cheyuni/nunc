@@ -34,7 +34,6 @@ class LoginView(View):
                                           facebook_id=facebook_id, username=name)
 
         user.backend = 'django.contrib.auth.backends.ModelBackend'
-        print 'here'
         login(request, user)
         return redirect('/')
 
