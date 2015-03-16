@@ -14,7 +14,8 @@ class CardView(TemplateView):
     def get(self, request, *args, **kwargs):
         user = request.user
         cards = user.card_set.all()
-        return render(request, self.template_name, {'cards':cards, 'user':user})
+        selected_card = user.card_set.first()
+        return render(request, self.template_name, {'cards':cards, 'user':user, 'selectd_card':selected_card})
 
     def post(self, request, *args, **kwargs):
         card_title = request.POST.get('card_title')
@@ -23,8 +24,8 @@ class CardView(TemplateView):
 
         user = request.user
         user.card_set.create(name=card_title, is_public=is_public, desc=card_desc)
-
-        return render(request, self.template_name, {'cards':user.card_set.all()})
+        selected_card = user.card_set.first()
+        return render(request, self.template_name, {'cards':user.card_set.all(), 'selected_card':selected_card})
 
 class VideoView(TemplateView):
     template_name = 'video.html'
@@ -34,7 +35,8 @@ class VideoView(TemplateView):
         card_id = kwargs['card_id']
         card = Card.objects.get(id=card_id)
         videos = card.video_set.all()
-        return render(request, self.template_name, {'user':user, 'videos':videos, 'card':card})
+        selected_card = user.card_set.first()
+        return render(request, self.template_name, {'user':user, 'videos':videos, 'card':card, 'selected_card':selected_card})
 
     def post(self, request, *args, **kwargs):
         user = request.user
@@ -44,8 +46,8 @@ class VideoView(TemplateView):
 
         searched_data = search(query)
         card, created = card.video_set.get_or_create(query=query, title=searched_data['title'], key=searched_data['video_id'], image_url=searched_data['image_url'], image_url_medium=searched_data['image_url_medium'], image_url_high=searched_data['image_url_high'])
-
-        return render(request, self.template_name, {'user':user, 'videos':videos, 'card':card})
+        selected_card = user.card_set.first()
+        return render(request, self.template_name, {'user':user, 'videos':videos, 'card':card, 'selected_card':selected_card})
 
 
 

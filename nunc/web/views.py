@@ -13,13 +13,15 @@ class NuncBaseView(TemplateView):
 
         user = request.user
         cards = Card.objects.filter(is_public=True).order_by('-like_count')
-        return render(request, self.template_name, {'user':user, 'cards':cards})
+        selected_card = user.card_set.first()
+        return render(request, self.template_name, {'user':user, 'cards':cards, 'selected_card':selected_card})
 
     def post(self, request, *args, **kwargs):
 
         user = request.user
         cards = Card.objects.filter(is_public=True).order_by('-like_count')
-        return render(request, self.template_name, {'user':user, 'cards':cards})
+        selected_card = user.card_set.first()
+        return render(request, self.template_name, {'user':user, 'cards':cards, 'selected_card':selected_card})
 
 
 class LoginView(View):
@@ -28,6 +30,7 @@ class LoginView(View):
     def post(self, request, *args, **kwargs):
         user = request.user
         cards = Card.objects.filter(is_public=True).order_by('-like_count')
+        selected_card = user.card_set.first()
         if user.is_authenticated:
             email = request.POST.get('email')
             first_name = request.POST.get('first_name')
@@ -43,7 +46,7 @@ class LoginView(View):
             login(request, user)
             return redirect('/')
         else:
-            return render(request, self.template_name, {'user':user, 'cards':cards})
+            return render(request, self.template_name, {'user':user, 'cards':cards, 'selected_card':selected_card})
 
 
 class LogoutView(View):
@@ -57,7 +60,8 @@ class CardView(TemplateView):
     template_name = 'card.html'
 
     def get(self, request, *args, **kwargs):
-        return render(request, self.template_name)
+        selected_card = user.card_set.first()
+        return render(request, self.template_name, {'selected_card':selected_card})
 
 def get_video(request):
     if 'query' not in request.POST:

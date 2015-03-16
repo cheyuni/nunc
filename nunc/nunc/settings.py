@@ -132,3 +132,6 @@ SOCIALACCOUNT_PROVIDERS = \
         'LOCALE_FUNC': lambda request: 'ko_KR',
         'VERSION': 'v2.2'}
     }
+
+LOGIN_REDIRECT_URL = '/'
+ACCOUNT_LOGOUT_REDIRECT_URL = '/'

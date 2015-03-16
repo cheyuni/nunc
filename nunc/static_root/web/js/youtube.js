@@ -24,6 +24,7 @@ function onPlayerStateChange(event) {
     done = true;
   }
 }
+
 function stopVideo() {
   player.stopVideo();
 }
