@@ -82,3 +82,15 @@ def search(search_string):
             image_url_high = search_result['snippet']['thumbnails']['high']['url']
 
     return dict(video_id=video_id, title=title, image_url=image_url, image_url_medium=image_url_medium, image_url_high=image_url_high)
+
+
+def profile(requests):
+    user = requests.user
+    if user.is_authenticated:
+        desc = requests.POST.get('desc')
+        id = requests.POST.get('id')
+        card = Card.objects.get(id=id)
+        card.desc = desc
+        card.save()
+        return redirect('/card/' + id)
+    

@@ -13,7 +13,10 @@ class NuncBaseView(TemplateView):
 
         user = request.user
         cards = Card.objects.filter(is_public=True).order_by('-like_count')
-        selected_card = user.card_set.first()
+        if user.is_authenticated():
+            selected_card = user.card_set.first()
+        else:
+            selected_card = []
         return render(request, self.template_name, {'user':user, 'cards':cards, 'selected_card':selected_card})
 
     def post(self, request, *args, **kwargs):

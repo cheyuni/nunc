@@ -10,18 +10,27 @@ function onYouTubeIframeAPIReady() {
   player = new YT.Player('player', {
     height: '200',
 	width: '300',
+	events: {
+      'onStateChange': onPlayerStateChange
+	  }
     });
 }
 
-function onPlayerReady(event) {
+
+function onReady(event) {
   event.target.playVideo();
 }
 
-var done = false;
+
+// YT.PlayerState.ENDED
+// YT.PlayerState.PLAYING
+// YT.PlayerState.PAUSED
+// YT.PlayerState.BUFFERING
+// YT.PlayerState.CUED
+
 function onPlayerStateChange(event) {
-  if (event.data == YT.PlayerState.PLAYING && !done) {
-    stopVideo()
-    done = true;
+  if (event.data == YT.PlayerState.ENDED) {
+    player.loadVideoById(playlist[index++ % playlist.length], 5, "large");
   }
 }
 

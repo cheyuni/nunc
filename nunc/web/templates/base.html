@@ -19,6 +19,7 @@
 		{% load socialaccount %}
 		{% providers_media_js %}
 		<script>
+			var index = 0;
 			var playlist = [{% if selected_card %} {% for video in selected_card.video_set.all %}'{{ video.key }}', {% endfor %}{% endif %}];
 
 		$("document").ready(function(){

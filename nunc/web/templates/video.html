@@ -1,11 +1,14 @@
 {% extends 'base.html' %}
 {% block ready %}
 	$(".pin").click(function(){
-
 	var key = $(this).attr("video-key");
+	index = parseInt($(this).attr("video-index"));
 	player.loadVideoById(key, 5, "large")
-
 	});
+	$("#submit").click(function(){
+	$("#profile-form").submit();
+	});
+	
 {% endblock %}
 {% block body %}
 	<div id="profile" class="clearfix">
@@ -13,7 +16,7 @@
 			{{ card.name }}
 		</h2>
 		<div id="card-profile" class="col-sm-8 row">
-			<p>{% if card.desc %}{{ card.desc }}{% else %}이곳을 클릭해서 이 카드에 대한 설명을 등록해주세요.{% endif %}</p>
+			<p id="profile-text" data-toggle="modal" data-target="#profile-modal">{% if card.desc %}{{ card.desc }}{% else %}이곳을 클릭해서 이 카드에 대한 설명을 등록해주세요.{% endif %}</p>
 		</div>
 		<div class="col-sm-4">
 			<form action="" method="post">
@@ -26,7 +29,7 @@
 	</div>
 	<div id="video-list">
 		{% for video in videos %}
-		<div class="pin video-pin" card-id="{{ card.id }}" video-key="{{ video.key }}">
+		<div class="pin video-pin" card-id="{{ card.id }}" video-index="{{ forloop.counter0 }}" video-key="{{ video.key }}">
 			<div class="col-sm-6 row">
 				<img class="video-img" src="{{ video.image_url_medium }}" alt="영상 섬네일" />
 			</div>
@@ -35,5 +38,31 @@
 			</div>
 		</div>
 		{% endfor %}
+	</div>
+	
+	<div id="profile-modal" class="modal fade">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title">문구 변경</h4>
+				</div>
+				<div class="modal-body" id="area_information">
+					<form id="profile-form" action="/card/profile/" method="post">
+						{% csrf_token %}
+						<div class="form-group">
+							<label for="local_name">카드에 대한 설명을 입력합니다.</label>
+							<textarea name="desc" class="form-control" placeholder="기분이 좋을때 듣는 곡들이에요">{{ card.desc }}</textarea>
+							<input type="hidden" name="id" value="{{ card.id }}" />
+						</div>
+					</form>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+						<button type="button" id="submit" class="btn btn-primary">등록</button>
+					</div>
+
+				</div><!-- /.modal-content -->
+			</div><!-- /.modal-dialog -->
+		</div><!-- /.modal -->
 	</div>
 {% endblock %}

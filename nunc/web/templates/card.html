@@ -14,7 +14,7 @@
 	<div id="profile">
 		<h2>
 			<img src="http://graph.facebook.com/{{ user.socialaccount_set.first.uid }}/picture" class="img-circle" />
-			<span>{{ user.username }}</span>
+			<span>{{ user.username }}님의 담벼락</span>
 		</h2>
 		<p id="profile-text" data-toggle="modal" data-target="#profile-modal">{% if user.profile %}{{ user.profile }}{% else %}이곳을 클릭해서 개인 프로필을 등록해 주세요{% endif %}</p>
 	</div>
